@@ -8,7 +8,7 @@ import UploadWidget from "../../components/UploadWidget/UploadWidget";
 function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
-  const [avatar, setAvatar] = useState(currentUser.avatar);
+  const [avatar, setAvatar] = useState([]);
   const navigate = useNavigate();
   const [publicId, setPublicId] = useState("");
 
@@ -23,7 +23,7 @@ function ProfileUpdatePage() {
         username,
         password,
         email,
-        avatar,
+        avatar: avatar[0],
       });
       updateUser(res.data);
       navigate("/profile");
@@ -65,7 +65,11 @@ function ProfileUpdatePage() {
         </form>
       </div>
       <div className="sideContainer">
-        <img src={avatar || "/noavatar.jpg"} alt="" className="avatar" />
+        <img
+          src={avatar[0] || currentUser.avatar || "/noavatar.jpg"}
+          alt=""
+          className="avatar"
+        />
         <UploadWidget
           uwConfig={{
             cloudName: "dqx4fw3j4", // Your Cloudinary cloud name
@@ -75,7 +79,7 @@ function ProfileUpdatePage() {
             folder: "avatars", // Uploads will go to the "avatars" folder
           }}
           // setPublicId={setPublicId}
-          setAvatar={setAvatar} // Function to set the avatar URL
+          setState={setAvatar} // Function to set the avatar URL
         />
       </div>
     </div>
