@@ -10,6 +10,7 @@ function ProfileUpdatePage() {
   const [error, setError] = useState("");
   const [avatar, setAvatar] = useState(currentUser.avatar);
   const navigate = useNavigate();
+  const [publicId, setPublicId] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ function ProfileUpdatePage() {
         username,
         password,
         email,
+        avatar,
       });
       updateUser(res.data);
       navigate("/profile");
@@ -72,6 +74,7 @@ function ProfileUpdatePage() {
             maxImageFileSize: 2000000, // 2MB max file size
             folder: "avatars", // Uploads will go to the "avatars" folder
           }}
+          // setPublicId={setPublicId}
           setAvatar={setAvatar} // Function to set the avatar URL
         />
       </div>

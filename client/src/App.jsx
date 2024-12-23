@@ -7,8 +7,35 @@ import ProfilePage from "./routes/profilePage/profilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
+import { useEffect } from "react";
 
 function App() {
+  // For Cloudynary
+  useEffect(() => {
+    const loadCloudinaryScript = () => {
+      if (!window.cloudinary) {
+        const script = document.createElement("script");
+        script.src = "https://widget.cloudinary.com/v2.0/global/all.js";
+        script.type = "text/javascript";
+        script.async = true;
+        // script.onload = () => console.log("Cloudinary script loaded");
+        document.body.appendChild(script);
+      }
+    };
+
+    loadCloudinaryScript();
+
+    // Optional cleanup (not usually necessary for global scripts)
+    return () => {
+      const existingScript = document.querySelector(
+        'script[src="https://widget.cloudinary.com/v2.0/global/all.js"]'
+      );
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+    };
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",

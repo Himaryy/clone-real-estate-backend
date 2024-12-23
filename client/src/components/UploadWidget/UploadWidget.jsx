@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const UploadWidget = ({ uwConfig, setPublicId }) => {
+const UploadWidget = ({ uwConfig, setPublicId, setAvatar }) => {
   const uploadWidgetRef = useRef(null);
   const uploadButtonRef = useRef(null);
 
@@ -13,7 +13,7 @@ const UploadWidget = ({ uwConfig, setPublicId }) => {
           (error, result) => {
             if (!error && result && result.event === "success") {
               console.log("Upload successful:", result.info);
-              setPublicId(result.info.public_id);
+              setAvatar(result.info.secure_url);
             }
           }
         );
