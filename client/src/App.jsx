@@ -9,7 +9,11 @@ import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
 import { useEffect } from "react";
-import { listPageLoader, singlePageLoader } from "./lib/loaders";
+import {
+  listPageLoader,
+  singlePageLoader,
+  profilePageLoader,
+} from "./lib/loaders";
 
 function App() {
   // For Cloudynary
@@ -75,6 +79,7 @@ function App() {
         {
           path: "/profile",
           element: <ProfilePage />,
+          loader: profilePageLoader,
         },
         {
           path: "/profile/update",
