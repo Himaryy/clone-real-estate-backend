@@ -9,6 +9,7 @@ import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
 import { useEffect } from "react";
+import { listPageLoader, singlePageLoader } from "./lib/loaders";
 
 function App() {
   // For Cloudynary
@@ -49,10 +50,12 @@ function App() {
         {
           path: "/list",
           element: <ListPage />,
+          loader: listPageLoader,
         },
         {
           path: "/:id",
           element: <SinglePage />,
+          loader: singlePageLoader,
         },
 
         {
