@@ -1,8 +1,9 @@
 import prisma from "../lib/prisma.js";
+import jwt from "jsonwebtoken";
 
 export const getPosts = async (req, res) => {
   const query = req.query;
-  console.log(query);
+
   try {
     const posts = await prisma.post.findMany({
       where: {
@@ -11,22 +12,25 @@ export const getPosts = async (req, res) => {
         property: query.property || undefined,
         bedroom: parseInt(query.bedroom) || undefined,
         price: {
-          gte: parseInt(query.minPrice) || 0,
-          lte: parseInt(query.maxPrice) || 100000000,
+          gte: parseInt(query.minPrice) || undefined,
+          lte: parseInt(query.maxPrice) || undefined,
         },
       },
     });
+
     // setTimeout(() => {
     res.status(200).json(posts);
     // }, 3000);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Failed to Get Posts !" });
+    res.status(500).json({ message: "Failed to get posts" });
   }
 };
 
 export const getPost = async (req, res) => {
   const id = req.params.id;
+  const token = req.cookies?.token;
+
   try {
     const post = await prisma.post.findUnique({
       where: { id },
@@ -41,10 +45,33 @@ export const getPost = async (req, res) => {
       },
     });
 
-    res.status(200).json(post);
+    // If a token is present
+    if (token) {
+      jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
+        if (!err) {
+          const saved = await prisma.savedPost.findUnique({
+            where: {
+              userId_postId: {
+                postId: id,
+                userId: payload.id,
+              },
+            },
+          });
+          return res
+            .status(200)
+            .json({ ...post, isSaved: saved ? true : false });
+        } else {
+          console.log("Token verification failed:", err);
+          return res.status(403).json({ message: "Invalid token" });
+        }
+      });
+    } else {
+      // No token present
+      return res.status(200).json({ ...post, isSaved: false });
+    }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Failed to Get Post !" });
+    return res.status(500).json({ message: "Failed to get post" });
   }
 };
 
