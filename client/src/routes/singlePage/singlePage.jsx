@@ -21,9 +21,11 @@ function SinglePage() {
     }
     // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
     try {
-      await apiRequest.post("/users/save", { postId: post.id });
+      await apiRequest.post("/users/save", {
+        postId: post.id,
+      });
     } catch (err) {
-      console.log(err);
+      console.error("Error:", err.response?.data || err.message);
       setSaved((prev) => !prev);
     }
   };
